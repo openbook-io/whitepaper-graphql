@@ -34,7 +34,7 @@ export class RegisterResolver {
 
     const msg = {
       to: email,
-      from: 'info@openbook.io',
+      from: config.sendgrid.from,
       templateId: config.sendgrid.activate_template_id,
       dynamic_template_data: {
         firstName,
