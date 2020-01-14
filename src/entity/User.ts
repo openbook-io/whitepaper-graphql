@@ -1,8 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Asset } from "./Asset";
 import { UserLink } from "./UserLink";
+import { Language } from './Language';
 import { Lazy } from '../helpers/Lazy';
+import { UserOrganization } from './UserOrganization';
 
 @ObjectType()
 @Entity()
@@ -53,6 +55,13 @@ export class User extends BaseEntity {
     lazy: true
   })
   links: Lazy<UserLink[]>;
+
+  @OneToMany(() => UserOrganization, userOrganization => userOrganization.user)
+  userOrganization: UserOrganization[];
+
+  @Field(() => Language)
+  @ManyToOne(() => Language, {lazy: true})
+  defaultLanguage: Lazy<Language>;
 
   @Field()
   @Column()
