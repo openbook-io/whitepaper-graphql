@@ -2,7 +2,7 @@ import { createMethodDecorator, UnauthorizedError } from 'type-graphql';
 import { Context } from "../interface/context";
 import { Organization } from "../entity/Organization";
 
-const IsMyOrganization = (roles) => {
+const IsMyOrganization = (roles?) => {
   return createMethodDecorator<Context>(async ({ context }, next) => {
     const organizationSlug = context.req.headers['w-organization'];
 
@@ -21,13 +21,18 @@ const IsMyOrganization = (roles) => {
 
     if(userOrganization.length < 1) throw new UnauthorizedError();
     
-    if (userOrganization[0].roles.some(role => roles.includes(role))) {
-      // grant access if the roles overlap
-      context.req.organization = organization;
+    context.req.organization = organization;
+
+    if(roles) {
+      if (userOrganization[0].roles.some(role => roles.includes(role))) {
+        // grant access if the roles overlap
+        return next();
+      } else {
+        throw new UnauthorizedError()
+      }
+    } else {
       return next();
     }
-
-    throw new UnauthorizedError()
   })
 }
 

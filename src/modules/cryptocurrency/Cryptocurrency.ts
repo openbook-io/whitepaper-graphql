@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Authorized } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Authorized, ID } from 'type-graphql';
 import { Cryptocurrency } from "../../entity/Cryptocurrency";
 import { User } from "../../entity/User";
 import { Organization } from '../../entity/Organization';
@@ -21,5 +21,37 @@ export class CryptocurrencyResolver {
     cryptocurrency.organization = organization;
 
     return cryptocurrency.save();
+  }
+
+  @IsMyOrganization(['admin'])
+  @Authorized('user')
+  @Mutation(() => Boolean)
+  async removeCryptocurrency(
+    @Arg("id", () => ID) id: number,
+    @CurrentOrganization() organization: Organization
+  ): Promise<boolean> {
+    const result = await Cryptocurrency.delete({ 
+      id,
+      organization
+    });
+
+    if(result.affected) return true
+    
+    return false;
+  }
+
+  @IsMyOrganization()
+  @Authorized('user')
+  @Query(() => [Cryptocurrency])
+  async myCryptocurrencies(
+    @CurrentOrganization() organization: Organization
+  ): Promise <Cryptocurrency[]> {
+    const cryptocurrencies = Cryptocurrency.find({
+      where: {
+        organization
+      }
+    })
+
+    return cryptocurrencies
   }
 }
