@@ -8,6 +8,7 @@ import { TypeOrmConnection } from '@auto-relay/typeorm';
 import { AutoRelayConfig } from 'auto-relay';
 import { BaseConnection } from './utils/base-connection';
 import { createSchema } from "./utils/createSchema";
+import { queryUser } from './utils/queryUser';
 
 new AutoRelayConfig({ orm: () => TypeOrmConnection,  extends: { connection: () => BaseConnection } })
 
@@ -32,7 +33,9 @@ const main = async () => {
     jwt({
       secret: config.secret,
       credentialsRequired: false,
+      requestProperty: 'auth'
     }),
+    queryUser
   );
 
   apolloServer.applyMiddleware({app, path});

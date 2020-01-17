@@ -50,7 +50,7 @@ export class UserResolver {
     @Arg("data") { firstName, lastName, bio, assetId, website }: UserInput,
     @Ctx() ctx: Context
   ): Promise<User> {
-    const user = await User.findOne(ctx.req.user.id);
+    const user = await User.findOne(ctx.req.user!.id);
     if(!user) throw new Error("User not found");
 
     const asset = assetId ? await Asset.findOne(assetId) : null;
@@ -79,7 +79,7 @@ export class UserResolver {
 
     userLink.url = url;
     userLink.socialProvider = socialProvider;
-    userLink.user = ctx.req.user;
+    userLink.user = ctx.req.user!;
     const newUserLink = userLink.save();
 
     return newUserLink;
@@ -111,7 +111,7 @@ export class UserResolver {
   ) : Promise<Boolean> {
     await UserLink.delete({
       id: id,
-      user: ctx.req.user
+      user: ctx.req.user!
     });
 
     return true;

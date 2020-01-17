@@ -56,8 +56,9 @@ export class User extends BaseEntity {
   })
   links: Lazy<UserLink[]>;
 
-  @OneToMany(() => UserOrganization, userOrganization => userOrganization.user)
-  userOrganization: UserOrganization[];
+  @Field(() => [UserOrganization])
+  @OneToMany(() => UserOrganization, userOrganization => userOrganization.user, {lazy: true})
+  userOrganization: Lazy<UserOrganization[]>;
 
   @Field(() => Language)
   @ManyToOne(() => Language, {lazy: true})

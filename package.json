@@ -2,7 +2,7 @@
   "name": "whitepaper-graphql",
   "description": "Platform that helps to connect cryptocurrency investors with the right cryptocurrencies.",
   "dependencies": {
-    "@auto-relay/typeorm": "^0.10.0",
+    "@auto-relay/typeorm": "^0.11.0",
     "@sendgrid/mail": "^6.4.0",
     "apollo-server-express": "^2.9.6",
     "auto-relay": "^0.10.0",
@@ -23,7 +23,7 @@
     "reflect-metadata": "^0.1.13",
     "slugify": "^1.3.5",
     "ts-node": "^8.5.0",
-    "type-graphql": "^0.17.5",
+    "type-graphql": "^0.17.6",
     "typeorm": "^0.2.22",
     "typeorm-typedi-extensions": "^0.2.3"
   },

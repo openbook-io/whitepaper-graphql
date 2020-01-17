@@ -4,6 +4,9 @@ import { buildSchema } from "type-graphql";
 import { RegisterResolver } from '../modules/user/Register';
 import { LoginResolver } from "../modules/user/Login";
 import { UserResolver } from "../modules/user/User";
+import { DocumentTypeResolver } from '../modules/document-type/DocumentType';
+import { OrganizationResolver } from '../modules/organization/Organization';
+import { CryptocurrencyResolver } from '../modules/cryptocurrency/Cryptocurrency';
 import { authChecker } from "../auth-checker";
 
 useContainer(Container);
@@ -13,7 +16,10 @@ export const createSchema = () =>
     resolvers: [
       RegisterResolver,
       LoginResolver,
-      UserResolver
+      UserResolver,
+      DocumentTypeResolver,
+      OrganizationResolver,
+      CryptocurrencyResolver
     ],
     container: Container,
     authChecker

@@ -1,18 +1,24 @@
-import { Entity, Column, BaseEntity, ManyToOne } from "typeorm";
+import { Entity, Column, BaseEntity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { User } from "./User";
 import { Organization } from "./Organization";
+import { Lazy } from '../helpers/Lazy';
 
 @ObjectType()
 @Entity()
 export class UserOrganization extends BaseEntity {
-  @Field()
-  @Column()
-  isActive: boolean;
+  @PrimaryGeneratedColumn()
+  UserOrganizationId!: number;
 
-  @ManyToOne(() => User, user => user.userOrganization, { primary: true })
-  user: User;
+  @Field(() => [String], { nullable: true })
+  @Column("simple-array", { nullable: true })
+  roles: string[]
 
-  @ManyToOne(() => Organization, organization => organization.userOrganization, { primary: true })
-  organization: Organization;
+  @Field(() => User)
+  @ManyToOne(() => User, user => user.userOrganization, { lazy: true, cascade: true })
+  user: Lazy<User>;
+
+  @Field(() => Organization)
+  @ManyToOne(() => Organization, organization => organization.userOrganization, { lazy: true, cascade: true })
+  organization: Lazy<Organization>;
 }

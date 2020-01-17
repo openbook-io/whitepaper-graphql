@@ -23,6 +23,10 @@ export class Organization extends BaseEntity {
   @Column()
   name: string;
 
+  @Field()
+  @Column("text", {unique: true})
+  slug: string;
+
   @Field({nullable: true})
   @Column({nullable: true})
   about: string;
@@ -42,7 +46,9 @@ export class Organization extends BaseEntity {
   @ManyToOne(() => User, {lazy: true})
   owner: Lazy<User>;
 
-  @OneToMany(() => UserOrganization, userOrganization => userOrganization.organization)
+  @OneToMany(() => UserOrganization, userOrganization => userOrganization.organization, {
+    lazy: true
+  })
   userOrganization: UserOrganization[];
 
   @Field(() => [Cryptocurrency])
