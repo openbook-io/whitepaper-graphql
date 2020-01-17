@@ -1,5 +1,5 @@
 import { createParamDecorator } from 'type-graphql';
-import { Context } from "../interface/context";
+import { Context } from "../interface/Context";
 
 const CurrentUser = () => {
   return createParamDecorator<Context>(({ context }) => context.req.user);
