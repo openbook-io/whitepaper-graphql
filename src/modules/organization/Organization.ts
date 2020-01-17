@@ -22,6 +22,23 @@ export class OrganizationResolver {
   }
 
   @Authorized('user')
+  @Query(() => [Organization])
+  async myOrganizations(
+    @CurrentUser() user: User
+  ): Promise<Organization[]> {
+    const userOrganizations = await UserOrganization.find({
+      where: {
+        user
+      },
+      relations: ['organization']
+    })
+
+    const organizations = userOrganizations.map((userOrganization) => userOrganization.organization)
+
+    return Promise.all(organizations);
+  }
+
+  @Authorized('user')
   @Mutation(() => Organization)
   async createOrganization(
     @Arg("data") { name, slug }: OrganizationInput,
@@ -30,6 +47,7 @@ export class OrganizationResolver {
     const newOrganization = new Organization();
     newOrganization.name = name;
     newOrganization.slug = slug;
+    newOrganization.owner = user;
   
     const newUserOrganization = new UserOrganization();
     newUserOrganization.roles = ['admin'];

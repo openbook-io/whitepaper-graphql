@@ -1,4 +1,4 @@
-import { Entity, Column, BaseEntity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, BaseEntity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 import { User } from "./User";
 import { Organization } from "./Organization";
@@ -6,6 +6,7 @@ import { Lazy } from '../helpers/Lazy';
 
 @ObjectType()
 @Entity()
+@Unique(['user', 'organization'])
 export class UserOrganization extends BaseEntity {
   @PrimaryGeneratedColumn()
   UserOrganizationId!: number;
