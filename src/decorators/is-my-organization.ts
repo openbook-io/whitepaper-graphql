@@ -1,5 +1,5 @@
 import { createMethodDecorator, UnauthorizedError } from 'type-graphql';
-import { Context } from "../interface/context";
+import { Context } from "../interface/Context";
 import { Organization } from "../entity/Organization";
 
 const IsMyOrganization = (roles?) => {
