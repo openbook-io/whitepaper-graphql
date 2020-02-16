@@ -4,7 +4,10 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 import { Token } from "../../entity/Token";
 import { User } from "../../entity/User";
 import * as jwt from 'jsonwebtoken'
-import { LoginInput } from "./login/LoginInput";
+import { LoginInput, ForgotPasswordInput } from "./login/InputTypes";
+import sendgrid from '@sendgrid/mail';
+
+sendgrid.setApiKey(config.sendgrid.api_key);
 
 @Resolver()
 export class LoginResolver {
@@ -34,5 +37,33 @@ export class LoginResolver {
     const token = jwt.sign({ id: user.id, roles: user.roles }, config.secret);
 
     return {token, user};
+  }
+
+  @Mutation(() => Boolean)
+  async sendRecoveryEmail(
+    @Arg("data") { email }: ForgotPasswordInput
+  ): Promise<Boolean> {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return true
+    }
+
+    const forgotPasswordToken = jwt.sign({ email }, config.forgotPasswordSecret);
+
+    const msg = {
+      to: email,
+      from: config.sendgrid.from,
+      templateId: config.sendgrid.forgot_password_template_id,
+      dynamic_template_data: {
+        forgotPasswordToken,
+        firstName: user.firstName,
+        lastName: user.lastName
+      }
+    };
+
+    sendgrid.send(msg);
+
+    return true
   }
 }

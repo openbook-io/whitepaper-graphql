@@ -7,9 +7,11 @@
   },
   "secret": "@@SECRET",
   "emailVerificationSecret": "@@EMAIL_VERIFICATION_SECRET",
+  "forgotPasswordSecret": "@@FORGOT_PASSWORD_SECRET",
   "sendgrid": {
     "from": "@@SENDGRID_FROM",
     "api_key": "@@SENDGRID_API_KEY",
-    "activate_template_id": "@@SENDGRID_ACTIVATE_TEMPLATE_ID"
+    "activate_template_id": "@@SENDGRID_ACTIVATE_TEMPLATE_ID",
+    "forgot_password_template_id": "@@SENDGRID_FORGOT_PASSWORD_TEMPLATE_ID"
   }
 }

@@ -4,7 +4,7 @@ import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import * as jwt from 'jsonwebtoken'
 import { Token } from "../../entity/Token";
 import { User } from "../../entity/User";
-import { RegisterInput, IsUsernameValidInput } from "./register/inputTypes";
+import { RegisterInput, IsUsernameValidInput } from "./register/InputTypes";
 import sendgrid from '@sendgrid/mail';
 
 sendgrid.setApiKey(config.sendgrid.api_key);
