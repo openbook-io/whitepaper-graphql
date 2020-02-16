@@ -12,11 +12,14 @@ export class LoginResolver {
   async login(
     @Arg("data")
     {
-      email,
+      usernameOrEmail,
       password
     }: LoginInput
   ): Promise<Token | null> {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.createQueryBuilder('user')
+      .where("user.email = :usernameOrEmail", { usernameOrEmail })
+      .orWhere("user.username = :usernameOrEmail", { usernameOrEmail })
+      .getOne();
 
     if (!user) {
       throw new Error("Email or password is invalid");
