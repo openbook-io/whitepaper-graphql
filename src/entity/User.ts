@@ -34,6 +34,10 @@ export class User extends BaseEntity {
   @Column("text", {unique: true})
   email: string;
 
+  @Field()
+  @Column("text", {unique: true})
+  username: string;
+
   @Field({ nullable: true })
   @Column({ nullable: true })
   website?: string
@@ -44,6 +48,10 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
+
+  @Field()
+  @Column()
+  newsletter: boolean;
 
   @Field(() => [String], { nullable: true })
   @Column("simple-array", { nullable: true })
