@@ -4,7 +4,7 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 import { Token } from "../../entity/Token";
 import { User } from "../../entity/User";
 import * as jwt from 'jsonwebtoken'
-import { LoginInput, ForgotPasswordInput } from "./login/InputTypes";
+import { LoginInput, ForgotPasswordInput, ChangePasswordInput} from "./login/InputTypes";
 import sendgrid from '@sendgrid/mail';
 
 sendgrid.setApiKey(config.sendgrid.api_key);
@@ -63,6 +63,33 @@ export class LoginResolver {
     };
 
     sendgrid.send(msg);
+
+    return true
+  }
+
+  @Mutation(() => Boolean)
+  async changePassword(
+    @Arg("data") { password, token }: ChangePasswordInput
+  ): Promise<Boolean> {
+    let payload: any = {}
+
+    try {
+      payload = await jwt.verify(token, config.forgotPasswordSecret)
+    } catch (e) {
+      return false;
+    }
+
+    const user = await User.findOne({
+      where: {email: payload.email}
+    });
+
+    if(!user) {
+      return false
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+    user.save();
 
     return true
   }
