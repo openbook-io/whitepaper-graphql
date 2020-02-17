@@ -1,7 +1,7 @@
 import { Length, IsEmail, Matches, IsBoolean } from "class-validator";
 import { Field, InputType } from "type-graphql";
-import { IsEmailAlreadyExist } from "./isEmailAlreadyExist";
-import { IsUsernameAlreadyExist } from "./isUsernameAlreadyExist";
+import { IsEmailAlreadyExist } from "./IsEmailAlreadyExist";
+import { IsUsernameAlreadyExist } from "./IsUsernameAlreadyExist";
 
 @InputType()
 export class RegisterInput {
@@ -24,7 +24,7 @@ export class RegisterInput {
   email: string;
 
   @Field()
-  @Length(5, 255, {message: "Password should be longer than 2 characters"})
+  @Length(5, 255, {message: "Password should be longer than 5 characters"})
   password: string;
 
   @Field()
