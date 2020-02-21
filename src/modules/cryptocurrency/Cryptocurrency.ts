@@ -11,11 +11,13 @@ export class CryptocurrencyResolver {
   @Authorized('user')
   @Mutation(() => Cryptocurrency)
   async createCryptocurrency(
+    @Arg("name") name: string,
     @Arg("ticker") ticker: string,
     @CurrentUser() user: User,
     @CurrentOrganization() organization: Organization
   ): Promise<Cryptocurrency> {
     const cryptocurrency = new Cryptocurrency();
+    cryptocurrency.name = name;
     cryptocurrency.ticker = ticker;
     cryptocurrency.createdBy = user;
     cryptocurrency.organization = organization;

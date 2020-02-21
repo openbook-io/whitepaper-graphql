@@ -13,6 +13,10 @@ export class Cryptocurrency extends BaseEntity {
 
   @Field()
   @Column()
+  name: string;
+
+  @Field()
+  @Column()
   ticker: string;
 
   @Field(() => Organization)

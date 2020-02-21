@@ -1,9 +1,10 @@
 import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
 import { Organization } from "../../entity/Organization";
 import { UserOrganization } from "../../entity/UserOrganization";
-import { CurrentUser } from "../../decorators/current";
+import { CurrentUser, CurrentOrganization } from "../../decorators/current";
 import { User } from '../../entity/User';
 import { OrganizationInput } from "./organization/OrganizationInput";
+import { IsMyOrganization } from '../../decorators/is-my-organization';
 
 @Resolver()
 export class OrganizationResolver {
@@ -19,6 +20,15 @@ export class OrganizationResolver {
     const userOrganization = await UserOrganization.find();
 
     return userOrganization;
+  }
+
+  @IsMyOrganization()
+  @Authorized('user')
+  @Query(() => Organization)
+  async whatIsMyCurrentOrganization(
+    @CurrentOrganization() organization: Organization
+  ): Promise<Organization> {
+    return organization
   }
 
   @Authorized('user')
