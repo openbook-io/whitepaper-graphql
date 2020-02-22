@@ -56,4 +56,21 @@ export class CryptocurrencyResolver {
 
     return cryptocurrencies
   }
+
+  @IsMyOrganization()
+  @Authorized('user')
+  @Query(() => Cryptocurrency)
+  async myCryptocurrency(
+    @Arg("id", () => ID) id: number,
+    @CurrentOrganization() organization: Organization
+  ): Promise <Cryptocurrency> {
+    const crypto = await Cryptocurrency.findOne({
+      id,
+      organization
+    })
+
+    if(!crypto) throw new Error("Cryptocurrency not found");
+
+    return crypto
+  }
 }
