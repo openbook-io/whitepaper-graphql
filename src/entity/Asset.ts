@@ -1,6 +1,7 @@
 import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, ManyToOne, BeforeInsert } from "typeorm";
 import { ObjectType, Field, ID  } from "type-graphql";
 import { User } from './User';
+import { Organization } from './Organization';
 import { Lazy } from '../helpers/Lazy';
 import { AssetType } from '../helpers/AssetType'
 
@@ -26,6 +27,10 @@ export class Asset extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, {lazy: true})
   user: Lazy<User>;
+
+  @Field(() => Organization, {nullable: true})
+  @ManyToOne(() => Organization, {lazy: true, nullable: true})
+  organization: Lazy<Organization>;
 
   @Column()
   createdAt: Date;

@@ -1,4 +1,4 @@
-import { Length } from "class-validator";
+import { Length, IsUrl } from "class-validator";
 import { Field, InputType } from "type-graphql";
 import { IsSlugAlreadyExist } from "./isSlugAlreadyExist";
 
@@ -11,4 +11,18 @@ export class OrganizationInput {
   @Field()
   @IsSlugAlreadyExist({ message: "Slug already in use" })
   slug: string;
+}
+
+@InputType()
+export class OrganizationEditInput {
+  @Field()
+  @Length(2, 255, {message: "Name should be longer than 2 characters"})
+  name: string;
+
+  @Field({ nullable: true })
+  @IsUrl(undefined, {message: "This is not an URL"})
+  website: string;
+
+  @Field({ nullable: true })
+  about: string;
 }

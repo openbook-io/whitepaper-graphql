@@ -3,7 +3,7 @@ import { Organization } from "../../entity/Organization";
 import { UserOrganization } from "../../entity/UserOrganization";
 import { CurrentUser, CurrentOrganization } from "../../decorators/current";
 import { User } from '../../entity/User';
-import { OrganizationInput } from "./organization/OrganizationInput";
+import { OrganizationInput, OrganizationEditInput } from "./organization/OrganizationInput";
 import { IsMyOrganization } from '../../decorators/is-my-organization';
 
 @Resolver()
@@ -66,5 +66,20 @@ export class OrganizationResolver {
     const userOrganization = await newUserOrganization.save();
 
     return userOrganization.organization
+  }
+
+  @IsMyOrganization()
+  @Authorized('user')
+  @Mutation(() => Organization)
+  async editOrganization(
+    @Arg("data") { name, website, about }: OrganizationEditInput,
+    @CurrentOrganization() organization: Organization
+  ): Promise<Organization> {
+    organization.about = about;
+    organization.website = website;
+    organization.name = name;
+    const userOrganization = await organization.save();
+
+    return userOrganization
   }
 }
