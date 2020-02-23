@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, BeforeInsert, BeforeUpdate, ManyToOne } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Asset } from "./Asset";
 import { UserLink } from "./UserLink";
@@ -14,8 +14,7 @@ export class User extends BaseEntity {
   id: number;
 
   @Field(() => Asset, { nullable: true })
-  @OneToOne(() => Asset, { lazy: true, nullable: true })
-  @JoinColumn()
+  @ManyToOne(() => Asset, { lazy: true, nullable: true })
   avatar?: Lazy<Asset> | null;
 
   @Field()

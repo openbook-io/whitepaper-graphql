@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, JoinColumn, OneToMany, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { Asset } from "./Asset";
 import { User } from "./User";
@@ -15,8 +15,7 @@ export class Organization extends BaseEntity {
   id: number;
 
   @Field(() => Asset, { nullable: true })
-  @OneToOne(() => Asset, { lazy: true, nullable: true })
-  @JoinColumn()
+  @ManyToOne(() => Asset, { lazy: true, nullable: true })
   picture?: Lazy<Asset> | null;
 
   @Field()
