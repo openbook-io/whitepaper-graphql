@@ -22,10 +22,12 @@ export class AssetResolver {
   @Query(() => [Asset])
   async getAssets(
     @CurrentUser() user: User,
+    @CurrentOrganization() organization: Organization,
     @Arg("type", () => AssetType, { nullable: true }) type?: AssetType
   ):Promise<Asset[]> {
     const assets = await Asset.find({
       user: user,
+      organization,
       ...(type) && {type}
     });
 
@@ -56,7 +58,7 @@ export class AssetResolver {
       version: result.version,
       type: type,
       user: user,
-      organization: organization
+      ...(organization) && {organization}
     }).save();
 
     return asset
