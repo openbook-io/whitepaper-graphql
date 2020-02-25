@@ -4,6 +4,7 @@ import { User } from "../../entity/User";
 import { Organization } from '../../entity/Organization';
 import { IsMyOrganization } from '../../decorators/is-my-organization';
 import { CurrentUser, CurrentOrganization } from "../../decorators/current";
+import { CryptocurrencyEditInput, CryptocurrencyCreateInput } from './inputTypes';
 
 @Resolver()
 export class CryptocurrencyResolver {
@@ -11,8 +12,7 @@ export class CryptocurrencyResolver {
   @Authorized('user')
   @Mutation(() => Cryptocurrency)
   async createCryptocurrency(
-    @Arg("name") name: string,
-    @Arg("ticker") ticker: string,
+    @Arg("data") { name, ticker }: CryptocurrencyCreateInput,
     @CurrentUser() user: User,
     @CurrentOrganization() organization: Organization
   ): Promise<Cryptocurrency> {
@@ -21,6 +21,22 @@ export class CryptocurrencyResolver {
     cryptocurrency.ticker = ticker;
     cryptocurrency.createdBy = user;
     cryptocurrency.organization = organization;
+
+    return cryptocurrency.save();
+  }
+
+  @IsMyOrganization(['admin'])
+  @Authorized('user')
+  @Mutation(() => Cryptocurrency)
+  async editCryptocurrency(
+    @Arg("data") { name, ticker, id }: CryptocurrencyEditInput
+  ): Promise<Cryptocurrency> {
+    const cryptocurrency = await Cryptocurrency.findOne(id);
+
+    if(!cryptocurrency) throw new Error("Cryptocurrency not found");
+
+    cryptocurrency.name = name;
+    cryptocurrency.ticker = ticker;
 
     return cryptocurrency.save();
   }
