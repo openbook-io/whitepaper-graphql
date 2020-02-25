@@ -7,6 +7,7 @@ import { UserInput, UserSearchInput, UserLinkInput, UserEditLinkInput } from "./
 import { Asset } from "../../entity/Asset";
 import * as jwt from 'jsonwebtoken'
 import { config } from 'node-config-ts'
+import { CurrentUser } from "../../decorators/current";
 
 @Resolver()
 export class UserResolver {
@@ -48,11 +49,8 @@ export class UserResolver {
   @Mutation(() => User)
   async updateMe(
     @Arg("data") { firstName, lastName, bio, assetId, website }: UserInput,
-    @Ctx() ctx: Context
+    @CurrentUser() user: User
   ): Promise<User> {
-    const user = await User.findOne(ctx.req.user!.id);
-    if(!user) throw new Error("User not found");
-
     const asset = assetId ? await Asset.findOne(assetId) : null;
     if(assetId && !asset) throw new Error("Asset not found");
 
