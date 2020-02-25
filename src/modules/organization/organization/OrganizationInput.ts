@@ -25,4 +25,7 @@ export class OrganizationEditInput {
 
   @Field({ nullable: true })
   about: string;
+
+  @Field({ nullable: true })
+  assetId?: string;
 }

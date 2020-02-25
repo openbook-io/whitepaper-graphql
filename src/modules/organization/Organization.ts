@@ -3,6 +3,7 @@ import { Organization } from "../../entity/Organization";
 import { UserOrganization } from "../../entity/UserOrganization";
 import { CurrentUser, CurrentOrganization } from "../../decorators/current";
 import { User } from '../../entity/User';
+import { Asset } from '../../entity/Asset';
 import { OrganizationInput, OrganizationEditInput } from "./organization/OrganizationInput";
 import { IsMyOrganization } from '../../decorators/is-my-organization';
 
@@ -72,12 +73,16 @@ export class OrganizationResolver {
   @Authorized('user')
   @Mutation(() => Organization)
   async editOrganization(
-    @Arg("data") { name, website, about }: OrganizationEditInput,
+    @Arg("data") { name, website, about, assetId }: OrganizationEditInput,
     @CurrentOrganization() organization: Organization
   ): Promise<Organization> {
+    const asset = assetId ? await Asset.findOne(assetId) : null;
+    if(assetId && !asset) throw new Error("Asset not found");
+
     organization.about = about;
     organization.website = website;
     organization.name = name;
+    organization.picture = asset;
     const userOrganization = await organization.save();
 
     return userOrganization

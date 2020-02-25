@@ -26,9 +26,14 @@ export class AssetResolver {
     @Arg("type", () => AssetType, { nullable: true }) type?: AssetType
   ):Promise<Asset[]> {
     const assets = await Asset.find({
-      user: user,
-      organization,
-      ...(type) && {type}
+      where: {
+        user: user,
+        organization,
+        ...(type) && {type}
+      },
+      order: {
+        createdAt: 'DESC'
+      }
     });
 
     return assets;
