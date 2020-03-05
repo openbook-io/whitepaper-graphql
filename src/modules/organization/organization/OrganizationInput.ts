@@ -1,5 +1,5 @@
 import { Length, IsUrl } from "class-validator";
-import { Field, InputType } from "type-graphql";
+import { Field, InputType, ID } from "type-graphql";
 import { IsSlugAlreadyExist } from "./isSlugAlreadyExist";
 
 @InputType()
@@ -28,4 +28,24 @@ export class OrganizationEditInput {
 
   @Field({ nullable: true })
   assetId?: string;
+}
+
+@InputType()
+export class OrganizationLinkInput {
+  @Field()
+  @IsUrl(undefined, {message: "This should be an URL"})
+  url: string;
+
+  @Field(() => ID)
+  socialProviderId: number;
+}
+
+@InputType()
+export class OrganizationEditLinkInput {
+  @Field()
+  @IsUrl(undefined, {message: "This should be an URL"})
+  url: string;
+
+  @Field(() => ID)
+  id: number;
 }

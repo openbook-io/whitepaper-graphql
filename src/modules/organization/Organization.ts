@@ -1,10 +1,12 @@
-import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Authorized, ID } from 'type-graphql';
 import { Organization } from "../../entity/Organization";
+import { OrganizationLink } from "../../entity/OrganizationLink";
+import { SocialProvider } from "../../entity/SocialProvider";
 import { UserOrganization } from "../../entity/UserOrganization";
 import { CurrentUser, CurrentOrganization } from "../../decorators/current";
 import { User } from '../../entity/User';
 import { Asset } from '../../entity/Asset';
-import { OrganizationInput, OrganizationEditInput } from "./organization/OrganizationInput";
+import { OrganizationInput, OrganizationEditInput, OrganizationLinkInput, OrganizationEditLinkInput } from "./organization/OrganizationInput";
 import { IsMyOrganization } from '../../decorators/is-my-organization';
 
 @Resolver()
@@ -86,5 +88,54 @@ export class OrganizationResolver {
     const userOrganization = await organization.save();
 
     return userOrganization
+  }
+
+  @IsMyOrganization()
+  @Authorized('user')
+  @Mutation(() => OrganizationLink)
+  async addOrganizationLink(
+    @Arg("data") { url, socialProviderId }: OrganizationLinkInput,
+    @CurrentOrganization() organization: Organization
+  ): Promise<OrganizationLink> {
+    const socialProvider = await SocialProvider.findOne(socialProviderId);
+    if(!socialProvider) throw new Error("Social provider not found");
+
+    const organizationLink = new OrganizationLink();
+
+    organizationLink.url = url;
+    organizationLink.socialProvider = socialProvider;
+    organizationLink.organization = organization;
+    const newOrganizationLink = organizationLink.save();
+
+    return newOrganizationLink;
+  }
+
+  @Authorized('user')
+  @Mutation(() => OrganizationLink)
+  async editOrganizationLink(
+    @Arg("data") { url, id }: OrganizationEditLinkInput
+  ): Promise<OrganizationLink> {
+    const organizationLink = await OrganizationLink.findOne({where: {
+      id: id
+    }});
+
+    if(!organizationLink) throw new Error("Organization link not found");
+
+    organizationLink.url = url;
+    const newProjectLink = organizationLink.save();
+
+    return newProjectLink;
+  }
+
+  @Authorized('user')
+  @Mutation(() => Boolean)
+  async deleteOrganizationLink(
+    @Arg("id", () => ID) id: number
+  ) : Promise<Boolean> {
+    await OrganizationLink.delete({
+      id
+    });
+
+    return true;
   }
 }
