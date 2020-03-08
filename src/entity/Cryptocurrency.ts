@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, BaseEntity, Column, ManyToOne } from "t
 import { ObjectType, Field, ID } from "type-graphql";
 import { User } from "./User";
 import { Organization } from "./Organization";
+import { CryptoDataCoins } from "./CryptoData";
 import { Lazy } from '../helpers/Lazy';
 
 @ObjectType()
@@ -18,6 +19,14 @@ export class Cryptocurrency extends BaseEntity {
   @Field()
   @Column()
   ticker: string;
+
+  @Field()
+  @Column({default: false})
+  isOnExchange: boolean;
+
+  @Field(() => CryptoDataCoins, {nullable: true})
+  @ManyToOne(() => CryptoDataCoins, {lazy: true, nullable :true})
+  cryptoDataCoin?: Lazy<CryptoDataCoins> | null;
 
   @Field(() => Organization)
   @ManyToOne(() => Organization, {lazy: true})

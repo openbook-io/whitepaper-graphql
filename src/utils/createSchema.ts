@@ -9,6 +9,7 @@ import { DocumentTypeResolver } from '../modules/document-type/DocumentType';
 import { OrganizationResolver } from '../modules/organization/Organization';
 import { CryptocurrencyResolver } from '../modules/cryptocurrency/Cryptocurrency';
 import { SocialProviderResolver } from '../modules/social-provider/SocialProvider';
+import { CryptoDataResolver } from '../modules/crypto-data/CryptoData';
 import { authChecker } from "../auth-checker";
 
 useContainer(Container);
@@ -23,7 +24,8 @@ export const createSchema = () =>
       OrganizationResolver,
       CryptocurrencyResolver,
       AssetResolver,
-      SocialProviderResolver
+      SocialProviderResolver,
+      CryptoDataResolver
     ],
     container: Container,
     authChecker

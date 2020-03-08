@@ -5,10 +5,12 @@
     "@auto-relay/typeorm": "^0.11.0",
     "@sendgrid/mail": "^6.4.0",
     "apollo-server-express": "^2.9.6",
+    "async-await-foreach": "^1.0.4",
     "auto-relay": "^0.10.0",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.11.0",
     "cloudinary": "^1.19.0",
+    "coinpaprika-js": "^0.1.8",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
@@ -41,6 +43,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon --exec ts-node src/index.ts",
+    "crypto-data": "ts-node src/crypto-data.ts",
     "create-config-types": "node-config-ts"
   }
 }

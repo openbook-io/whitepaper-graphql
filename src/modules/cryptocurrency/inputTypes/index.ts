@@ -9,6 +9,12 @@ export class CryptocurrencyCreateInput {
   @Field()
   @Length(2, 6, {message: "Ticker should be between 2 to 6 characters"})
   ticker: string;
+
+  @Field()
+  isOnExchange: boolean;
+
+  @Field(() => ID, {nullable: true})
+  coinDataId: number;
 }
 
 @InputType()
