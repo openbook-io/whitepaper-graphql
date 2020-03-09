@@ -1,5 +1,6 @@
 import { Entity, PrimaryColumn, BaseEntity, Column } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
+import { CryptoDataHistorical } from "./Historical";
 
 @ObjectType()
 @Entity()
@@ -31,4 +32,7 @@ export class CryptoDataCoins extends BaseEntity {
   @Field()
   @Column()
   type: string;
+
+  @Field(() => CryptoDataHistorical)
+  history: CryptoDataHistorical[];
 }

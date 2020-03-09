@@ -1,7 +1,9 @@
-import { Resolver, Arg, Query } from 'type-graphql';
-import { CryptoDataCoins } from "../../entity/CryptoData";
+import { Resolver, Arg, Query, FieldResolver, Root } from 'type-graphql';
+import { CryptoDataCoins, CryptoDataHistorical } from "../../entity/CryptoData";
+import cp from 'coinpaprika-js';
+import moment from 'moment';
 
-@Resolver()
+@Resolver(CryptoDataCoins)
 export class CryptoDataResolver {
   @Query(() => [CryptoDataCoins])
   async searchCryptoDataCoins(
@@ -13,5 +15,13 @@ export class CryptoDataResolver {
     })
 
     return crypto
+  }
+
+  @FieldResolver()
+  async history(@Root() cryptoDataCoins: CryptoDataCoins): Promise<CryptoDataHistorical[]> {
+    const startDate = moment().subtract(7,'d').format('YYYY-MM-DD');
+    const historical = await cp.historical(cryptoDataCoins.id, startDate, {interval: '1h'});
+
+    return historical;
   }
 }
