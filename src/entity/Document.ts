@@ -16,9 +16,9 @@ export class Document extends BaseEntity {
   @ManyToOne(() => DocumentType, {lazy: true})
   type: Lazy<DocumentType>;
 
-  @Field()
-  @Column()
-  typeText: string;
+  @Field({nullable: true})
+  @Column({nullable: true})
+  typeText?: string;
 
   @Field(() => Organization)
   @ManyToOne(() => Organization, {lazy: true})

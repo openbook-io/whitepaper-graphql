@@ -6,6 +6,7 @@ import { LoginResolver } from "../modules/user/Login";
 import { UserResolver } from "../modules/user/User";
 import { AssetResolver } from "../modules/asset/Asset";
 import { DocumentTypeResolver } from '../modules/document-type/DocumentType';
+import { DocumentResolver } from '../modules/document/Document';
 import { OrganizationResolver } from '../modules/organization/Organization';
 import { CryptocurrencyResolver } from '../modules/cryptocurrency/Cryptocurrency';
 import { SocialProviderResolver } from '../modules/social-provider/SocialProvider';
@@ -21,6 +22,7 @@ export const createSchema = () =>
       LoginResolver,
       UserResolver,
       DocumentTypeResolver,
+      DocumentResolver,
       OrganizationResolver,
       CryptocurrencyResolver,
       AssetResolver,
