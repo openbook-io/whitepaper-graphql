@@ -11,6 +11,7 @@ import { OrganizationResolver } from '../modules/organization/Organization';
 import { CryptocurrencyResolver } from '../modules/cryptocurrency/Cryptocurrency';
 import { SocialProviderResolver } from '../modules/social-provider/SocialProvider';
 import { CryptoDataResolver } from '../modules/crypto-data/CryptoData';
+import { PdfResolver } from '../modules/pdf/Pdf';
 import { LanguageResolver } from '../modules/language/Language';
 import { authChecker } from "../auth-checker";
 
@@ -29,7 +30,8 @@ export const createSchema = () =>
       AssetResolver,
       SocialProviderResolver,
       CryptoDataResolver,
-      LanguageResolver
+      LanguageResolver,
+      PdfResolver
     ],
     container: Container,
     authChecker
