@@ -5,6 +5,7 @@ import { RegisterResolver } from '../modules/user/Register';
 import { LoginResolver } from "../modules/user/Login";
 import { UserResolver } from "../modules/user/User";
 import { AssetResolver } from "../modules/asset/Asset";
+import { DocumentVersionResolver } from '../modules/document-version/DocumentVersion';
 import { DocumentTypeResolver } from '../modules/document-type/DocumentType';
 import { DocumentResolver } from '../modules/document/Document';
 import { OrganizationResolver } from '../modules/organization/Organization';
@@ -23,6 +24,7 @@ export const createSchema = () =>
       RegisterResolver,
       LoginResolver,
       UserResolver,
+      DocumentVersionResolver,
       DocumentTypeResolver,
       DocumentResolver,
       OrganizationResolver,

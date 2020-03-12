@@ -9,6 +9,7 @@ import { Lazy } from '../helpers/Lazy';
 
 @ObjectType()
 @Entity()
+@Index(["published", "document", "language"], { unique: true, where: '"published" IS NOT NULL' }) 
 @Index(["version", "document", "language"], { unique: true })
 export class DocumentVersion extends BaseEntity {
   @Field(() => ID)
@@ -19,13 +20,17 @@ export class DocumentVersion extends BaseEntity {
   @Column()
   title: string;
 
-  @Field()
-  @Column()
-  description: string;
+  @Field({nullable: true})
+  @Column({nullable: true})
+  description?: string;
 
   @Field()
   @Column()
   version: string;
+
+  @Field({nullable: true})
+  @Column({nullable: true})
+  published: boolean;
 
   @Field(() => User)
   @ManyToOne(() => User, {lazy: true})

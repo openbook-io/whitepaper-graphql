@@ -1,13 +1,14 @@
-import { Resolver, Authorized, Mutation, Arg, Query } from 'type-graphql';
+import { Resolver, Authorized, Mutation, Arg, Query, FieldResolver, Root } from 'type-graphql';
 import { Document } from "../../entity/Document";
 import { DocumentType } from "../../entity/DocumentType";
+import { DocumentVersion } from "../../entity/DocumentVersion";
 import { User } from "../../entity/User";
 import { Organization } from "../../entity/Organization";
 import { CurrentUser, CurrentOrganization } from "../../decorators/current";
 import { CreateDocumentInput } from './inputTypes';
 import { IsMyOrganization } from '../../decorators/is-my-organization';
 
-@Resolver()
+@Resolver(Document)
 export class DocumentResolver {
   @IsMyOrganization()
   @Authorized('user')
@@ -43,5 +44,17 @@ export class DocumentResolver {
     })
 
     return documents
+  }
+
+  @FieldResolver()
+  async versions(@Root() document: Document): Promise<DocumentVersion[]> {
+    const documentVersions = await DocumentVersion.find({
+      where: {
+        document,
+        published: true
+      }
+    })
+
+    return documentVersions
   }
 }

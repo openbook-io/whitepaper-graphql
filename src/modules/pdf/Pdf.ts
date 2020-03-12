@@ -50,12 +50,12 @@ export class PdfResolver {
       });
     })
 
-    const document = new Pdf();
-    document.name = file.filename;
-    document.documentId = key;
-    document.user = user;
-    document.organization = organization;
+    const pdf = new Pdf();
+    pdf.name = file.filename;
+    pdf.documentId = key;
+    pdf.user = user;
+    pdf.organization = organization;
 
-    return document.save();
+    return pdf.save();
   }
 }

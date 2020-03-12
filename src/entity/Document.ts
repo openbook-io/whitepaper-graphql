@@ -3,6 +3,7 @@ import { ObjectType, Field, ID } from "type-graphql";
 import { User } from "./User";
 import { Organization } from "./Organization";
 import { DocumentType } from "./DocumentType";
+import { DocumentVersion } from "./DocumentVersion";
 import { Lazy } from '../helpers/Lazy';
 
 @ObjectType()
@@ -20,6 +21,9 @@ export class Document extends BaseEntity {
   @Column({nullable: true})
   typeText?: string;
 
+  @Field(() => [DocumentVersion])
+  versions: DocumentVersion[];
+  
   @Field(() => Organization)
   @ManyToOne(() => Organization, {lazy: true})
   organization: Lazy<Organization>;
