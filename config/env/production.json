@@ -13,5 +13,13 @@
     "api_key": "@@SENDGRID_API_KEY",
     "activate_template_id": "@@SENDGRID_ACTIVATE_TEMPLATE_ID",
     "forgot_password_template_id": "@@SENDGRID_FORGOT_PASSWORD_TEMPLATE_ID"
-  }
+  },
+  "documentUrl": "@@DOCUMENT_URL",
+  "amazon": {
+    "accessKey": "@@AMAZON_ACCESS_KEY",
+    "secretAccessKey": "@@AMAZON_SECRET_KEY",
+    "bucket": "@@AMAZON_BUCKET",
+    "region": "@@AMAZON_REGION"
+  },
+  "redisUrl": "@@REDIS_URL"
 }
