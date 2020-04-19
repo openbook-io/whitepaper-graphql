@@ -138,4 +138,16 @@ export class OrganizationResolver {
 
     return true;
   }
+
+  @Query(() => [Organization])
+  async getTrendingOrganizations(
+  ) : Promise<Organization[]> {
+    const organizations = await Organization.find({
+      where: {
+        trending: true
+      }
+    });
+
+    return organizations;
+  }
 }

@@ -10,6 +10,9 @@ import aws from 'aws-sdk';
 import UploadStream from 's3-stream-upload';
 import {v4} from 'uuid';
 import { config } from 'node-config-ts'
+import Queue from 'bull';
+
+const workQueue = new Queue('pdf', config.redisUrl);
 
 aws.config.update({
   accessKeyId: config.amazon.accessKey,
@@ -29,7 +32,7 @@ export class PdfResolver {
     @CurrentUser() user: User
   ):Promise<Pdf> {
     const stream = file.createReadStream();
-    const key = v4() + '.pdf';
+    const key = v4();
 
     const s3 = new aws.S3({
       endpoint: config.documentUrl, 
@@ -38,7 +41,7 @@ export class PdfResolver {
 
     const upload = UploadStream(s3, {
       Bucket: config.amazon.bucket,
-      Key: key,
+      Key: `pdfs/${key}.pdf`,
       ContentType: 'application/pdf'
     });
 
@@ -50,6 +53,8 @@ export class PdfResolver {
       });
     })
 
+    await workQueue.add({document: key});
+
     const pdf = new Pdf();
     pdf.name = file.filename;
     pdf.documentId = key;
@@ -59,3 +64,7 @@ export class PdfResolver {
     return pdf.save();
   }
 }
+
+workQueue.on('global:progress', (jobId, progress) => {
+  console.log(`Job ${jobId} is ${progress * 100}% ready!`);
+});

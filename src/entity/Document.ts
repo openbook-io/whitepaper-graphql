@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, Column, ManyToOne, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, Column, ManyToOne, BeforeInsert, BeforeUpdate, OneToMany } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { User } from "./User";
 import { Organization } from "./Organization";
@@ -22,7 +22,12 @@ export class Document extends BaseEntity {
   typeText?: string;
 
   @Field(() => [DocumentVersion])
+  @OneToMany(() => DocumentVersion, documentVersion => documentVersion.document)
   versions: DocumentVersion[];
+
+  @Field({nullable: true})
+  @Column({nullable: true})
+  versionCount?: number;
   
   @Field(() => Organization)
   @ManyToOne(() => Organization, {lazy: true})

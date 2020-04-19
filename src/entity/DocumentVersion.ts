@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, Column, Index, ManyToOne, OneToOne, BeforeInsert, BeforeUpdate, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, Column, Index, ManyToOne, OneToOne, BeforeInsert, BeforeUpdate, JoinColumn, AfterInsert, AfterRemove, AfterUpdate, RelationId } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { User } from "./User";
 import { Organization } from "./Organization";
@@ -49,6 +49,9 @@ export class DocumentVersion extends BaseEntity {
   @ManyToOne(() => Document, {lazy: true})
   document: Lazy<Document>;
 
+  @RelationId((document: DocumentVersion) => document.document) // you need to specify target relation
+  documentId: number;
+
   @Field(() => Language)
   @ManyToOne(() => Language, {lazy: true})
   language: Lazy<Language>;
@@ -69,5 +72,18 @@ export class DocumentVersion extends BaseEntity {
   @BeforeUpdate()
   beforeUpdate() {
     this.updatedAt = new Date();
+  }
+
+  @AfterInsert()
+  @AfterRemove()
+  @AfterUpdate()
+  async checkRelationship() {
+    const test = await Document
+    .createQueryBuilder("document")
+    .loadRelationCountAndMap("document.versionCount", "document.versions")
+    .where("document.id = :id", { id: this.documentId })
+    .getOne();
+
+    console.log(test)
   }
 }

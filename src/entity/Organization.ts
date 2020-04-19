@@ -34,6 +34,10 @@ export class Organization extends BaseEntity {
   @Column({nullable: true})
   website: string;
 
+  @Field({nullable: true})
+  @Column({nullable: true})
+  trending: boolean;
+
   @Field(() => [OrganizationLink])
   @OneToMany(() => OrganizationLink, organizationLink => organizationLink.organization, {
     cascade: true,
