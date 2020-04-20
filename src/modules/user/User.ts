@@ -1,6 +1,7 @@
 import { Resolver, Query, Ctx, Authorized, Mutation, Arg, ID } from 'type-graphql';
 import { Context } from "../../interface/Context";
 import { User } from "../../entity/User";
+import { Language } from "../../entity/Language";
 import { UserLink } from "../../entity/UserLink";
 import { SocialProvider } from "../../entity/SocialProvider";
 import { UserInput, UserSearchInput, UserLinkInput, UserEditLinkInput } from "./user/UserInput";
@@ -59,6 +60,21 @@ export class UserResolver {
     user.bio = bio;
     user.avatar = asset;
     user.website = website;
+    user.save();
+
+    return user;
+  }
+
+  @Authorized('user')
+  @Mutation(() => User)
+  async setMyDefaultLanguage(
+    @Arg("languageId", () => ID) languageId: number,
+    @CurrentUser() user: User
+  ): Promise<User> {
+    const language = await Language.findOne(languageId);
+    if(!language) throw new Error("Language not found");
+
+    user.defaultLanguage = language;
     user.save();
 
     return user;

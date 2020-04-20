@@ -46,6 +46,27 @@ export class DocumentResolver {
     return documents
   }
 
+  @Query(() => [Document])
+  async getDocumentsByOrganizationSlug(
+    @Arg("slug") slug: string,
+  ): Promise <Document[]> {
+    const organization = await Organization.findOne({
+      where: {
+        slug
+      }
+    });
+
+    if(!organization) throw new Error("Organization not found");
+
+    const documents = Document.find({
+      where: {
+        organization
+      }
+    })
+
+    return documents
+  }
+
   @FieldResolver()
   async versions(@Root() document: Document): Promise<DocumentVersion[]> {
     const documentVersions = await DocumentVersion.find({

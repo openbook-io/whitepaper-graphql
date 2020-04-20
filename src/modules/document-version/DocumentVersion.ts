@@ -57,13 +57,15 @@ export class DocumentVersionResolver {
   @IsMyOrganization()
   @Authorized('user')
   @Query(() => [DocumentVersion])
-  async getDocumentVersions(
+  async getMyDocumentVersions(
     @CurrentOrganization() organization: Organization,
     @CurrentUser() user: User,
     @Arg("documentId", () => ID) id: number,
   ) : Promise<DocumentVersion[]> {
     const document = await Document.findOne({where: {
-      id: id
+      user: user,
+      id: id,
+      organization: organization
     }});
 
     if(!document) throw new Error("Document not found");
@@ -82,7 +84,7 @@ export class DocumentVersionResolver {
   @IsMyOrganization()
   @Authorized('user')
   @Query(() => DocumentVersion)
-  async getDocumentVersion(
+  async getMyDocumentVersion(
     @CurrentOrganization() organization: Organization,
     @CurrentUser() user: User,
     @Arg("documentVersionId", () => ID) id: number,
