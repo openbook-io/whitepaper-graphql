@@ -11,6 +11,21 @@ import { IsMyOrganization } from '../../decorators/is-my-organization';
 
 @Resolver()
 export class OrganizationResolver {
+  @Query(() => Organization)
+  async getOrganizationBySlug(
+    @Arg("slug") slug: string,
+  ) : Promise<Organization> {
+    const organization = await Organization.findOne({
+      where: {
+        slug: slug
+      }
+    });
+
+    if(!organization) throw new Error("Organization not found");
+
+    return organization;
+  }
+
   @Query(() => [Organization])
   async getOrganizations() : Promise<Organization[]> {
     const organizations = await Organization.find();
