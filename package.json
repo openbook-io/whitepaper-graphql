@@ -4,7 +4,7 @@
   "dependencies": {
     "@auto-relay/typeorm": "^0.11.0",
     "@sendgrid/mail": "^6.4.0",
-    "apollo-server-express": "^2.9.6",
+    "apollo-server-express": "^2.14.2",
     "async-await-foreach": "^1.0.4",
     "auto-relay": "^0.10.0",
     "aws-sdk": "^2.638.0",
